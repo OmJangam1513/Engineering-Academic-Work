@@ -1,0 +1,28 @@
+test> db.createCollection("student_info");
+{ ok: 1 }
+
+db.student_info.insertMany([
+    { name: "Om", Year: "Second", marks: 90 },
+    { name: "Prashant", Year: "Second", marks: 75 },
+    { name: "Parul", Year: "Third", marks: 80 },
+    { name: "Viraj", Year: "Second", marks: 62 },
+    { name: "Suyash", Year: "Third", marks: 70 }
+]);
+
+var map = function() {
+    emit(this.Year, this.marks);
+};
+
+var reduce = function(Year, marks) {
+    return Array.sum(marks);
+};
+
+db.student_info.mapReduce(map, reduce, { out: "result" });
+
+db.result.find();
+
+[
+  { _id: 'Second', value: 227 },
+  { _id: 'Third', value: 150 }
+]
+

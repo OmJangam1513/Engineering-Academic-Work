@@ -1,0 +1,68 @@
+CREATE DATABASE blogsite; 
+USE blogsite; 
+Step 3 — create the three tables: 
+CREATE TABLE users ( 
+id INT AUTO_INCREMENT PRIMARY KEY, 
+username VARCHAR(50) NOT NULL UNIQUE, 
+email VARCHAR(100) NOT NULL UNIQUE, 
+password_hash VARCHAR(255) NOT NULL, 
+bio TEXT, 
+profile_pic VARCHAR(255) DEFAULT 'default.png', 
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP 
+);
+
+ 
+CREATE TABLE posts ( 
+id INT AUTO_INCREMENT PRIMARY KEY, 
+user_id INT NOT NULL, 
+title VARCHAR(200) NOT NULL, 
+content TEXT NOT NULL, 
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE 
+);
+
+ 
+CREATE TABLE comments ( 
+id INT AUTO_INCREMENT PRIMARY KEY, 
+post_id INT NOT NULL, 
+user_id INT NOT NULL, 
+body TEXT NOT NULL, 
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE, 
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE 
+); 
+
+
+INSERT INTO users (username, email, password_hash, bio) VALUES 
+('alice', 'alice@example.com', 'hashed_pw_1', 'Hi, I am Alice!'), 
+('bob', 'bob@example.com', 'hashed_pw_2', 'Bob here, I love writing.'); 
+
+
+INSERT INTO posts (user_id, title, content) VALUES 
+(1, 'My first blog post', 'Hello world! This is my first post.'), 
+(1, 'Another day, another blog', 'Just sharing my thoughts today.'), 
+(2, 'Bob writes too!', 'Check out my first post everyone.');
+
+ 
+INSERT INTO comments (post_id, user_id, body) VALUES 
+(1, 2, 'Great post Alice!'), 
+(1, 1, 'Thanks Bob!'), 
+(3, 1, 'Nice one Bob!'); 
+
+
+CREATE TABLE likes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_like (user_id, post_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+);
+
+ALTER TABLE posts 
+ADD event_date DATETIME NULL,
+ADD location VARCHAR(255) NULL,
+ADD category VARCHAR(100) NULL,
+ADD views INT DEFAULT 0;
+

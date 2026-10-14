@@ -1,0 +1,9 @@
+C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/CMakeFiles/Practice1.dir
+C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/CMakeFiles/edit_cache.dir
+C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/CMakeFiles/list_install_components.dir
+C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/CMakeFiles/install.dir
+C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/CMakeFiles/install/local.dir
+C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/CMakeFiles/install/strip.dir
+C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/CMakeFiles/Practice1_autogen_timestamp_deps.dir
+C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/CMakeFiles/Practice1_autogen.dir

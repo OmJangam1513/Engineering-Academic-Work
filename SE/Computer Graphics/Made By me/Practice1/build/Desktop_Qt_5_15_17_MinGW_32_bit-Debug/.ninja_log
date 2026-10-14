@@ -1,0 +1,25 @@
+# ninja log v6
+5	665	7559896723746905	Practice1_autogen/timestamp	32b009ab3b5ace0
+5	665	7559896723746905	Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+5	665	7559896723746905	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/timestamp	32b009ab3b5ace0
+5	665	7559896723746905	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+671	2889	7559896724481888	CMakeFiles/Practice1.dir/Practice1_autogen/mocs_compilation.cpp.obj	97b102331327ef83
+676	2951	7559896724531725	CMakeFiles/Practice1.dir/main.cpp.obj	ffbcc1c578363aec
+14	139	7559897835281696	Practice1_autogen/timestamp	32b009ab3b5ace0
+14	139	7559897835281696	Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+14	139	7559897835281696	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/timestamp	32b009ab3b5ace0
+14	139	7559897835281696	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+19	171	7559898166723142	Practice1_autogen/timestamp	32b009ab3b5ace0
+19	171	7559898166723142	Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+19	171	7559898166723142	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/timestamp	32b009ab3b5ace0
+19	171	7559898166723142	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+13	171	7559899466923423	Practice1_autogen/timestamp	32b009ab3b5ace0
+13	171	7559899466923423	Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+13	171	7559899466923423	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/timestamp	32b009ab3b5ace0
+13	171	7559899466923423	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+14	183	7559901417944605	Practice1_autogen/timestamp	32b009ab3b5ace0
+14	183	7559901417944605	Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+14	183	7559901417944605	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/timestamp	32b009ab3b5ace0
+14	183	7559901417944605	C:/Users/HP/Documents/Practice1/build/Desktop_Qt_5_15_17_MinGW_32_bit-Debug/Practice1_autogen/mocs_compilation.cpp	32b009ab3b5ace0
+184	2311	7559901419652593	CMakeFiles/Practice1.dir/mainwindow.cpp.obj	83f8f33edbf948a8
+2312	2565	7559901440933734	Practice1.exe	86e1de66661f5bfe

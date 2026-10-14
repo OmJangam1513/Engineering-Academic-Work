@@ -1,0 +1,270 @@
+test> db.createCollection("Student");
+{ ok: 1 }
+
+test> db.Student.insert({id:1 , name:"Om" , RollNo:39021 , cgpa:9.23});
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('68dcacafe32e7f9a7ac73bf8') }
+}
+
+test> show collections
+Student
+
+test> db.Student.find();
+[
+  {
+    _id: ObjectId('68dcacafe32e7f9a7ac73bf8'),
+    id: 1,
+    name: 'Om',
+    RollNo: 39021,
+    cgpa: 9.23
+  },
+  {
+    _id: ObjectId('68dcad21e32e7f9a7ac73bf9'),
+    id: 2,
+    name: 'Prashant',
+    RollNo: 39024,
+    cgpa: 9.5
+  },
+  {
+    _id: ObjectId('68dcad55e32e7f9a7ac73bfa'),
+    id: 3,
+    name: 'Parul',
+    RollNo: 39029,
+    cgpa: 8.11
+  },
+  {
+    _id: ObjectId('68dcad77e32e7f9a7ac73bfb'),
+    id: 4,
+    name: 'Viraj',
+    RollNo: 38028,
+    cgpa: 9.73
+  },
+  {
+    _id: ObjectId('68dcae12e32e7f9a7ac73bfd'),
+    id: 6,
+    name: 'Omkar',
+    RollNo: 39027,
+    cgpa: 8.23
+  },
+  {
+    _id: ObjectId('68dcaf27e32e7f9a7ac73bfe'),
+    id: 7,
+    name: 'Vikarant',
+    RollNo: 39043,
+    cgpa: 8.11
+  },
+  {
+    _id: ObjectId('68dcaf27e32e7f9a7ac73bff'),
+    id: 8,
+    name: 'Suyash',
+    RollNo: 39036,
+    cgpa: 10
+  },
+  {
+    _id: ObjectId('68dcaf8ce32e7f9a7ac73c00'),
+    id: 7,
+    name: 'Vikarant',
+    RollNo: 39043,
+    cgpa: 8.11,
+    branch: 'AIDS',
+    Domain: 'DeepLearning'
+  },
+  {
+    _id: ObjectId('68dcaf8ce32e7f9a7ac73c01'),
+    id: 8,
+    name: 'Suyash',
+    RollNo: 39036,
+    cgpa: 10
+  }
+]
+
+test> db.Student.deleteOne({id:7});
+{ acknowledged: true, deletedCount: 1 }
+
+test> db.Student.deleteOne({id:8});
+{ acknowledged: true, deletedCount: 1 }
+
+test> db.Student.find();
+[
+  {
+    _id: ObjectId('68dcacafe32e7f9a7ac73bf8'),
+    id: 1,
+    name: 'Om',
+    RollNo: 39021,
+    cgpa: 9.23
+  },
+  {
+    _id: ObjectId('68dcad21e32e7f9a7ac73bf9'),
+    id: 2,
+    name: 'Prashant',
+    RollNo: 39024,
+    cgpa: 9.5
+  },
+  {
+    _id: ObjectId('68dcad55e32e7f9a7ac73bfa'),
+    id: 3,
+    name: 'Parul',
+    RollNo: 39029,
+    cgpa: 8.11
+  },
+  {
+    _id: ObjectId('68dcad77e32e7f9a7ac73bfb'),
+    id: 4,
+    name: 'Viraj',
+    RollNo: 38028,
+    cgpa: 9.73
+  },
+  {
+    _id: ObjectId('68dcae12e32e7f9a7ac73bfd'),
+    id: 6,
+    name: 'Omkar',
+    RollNo: 39027,
+    cgpa: 8.23
+  },
+  {
+    _id: ObjectId('68dcaf8ce32e7f9a7ac73c00'),
+    id: 7,
+    name: 'Vikarant',
+    RollNo: 39043,
+    cgpa: 8.11,
+    branch: 'AIDS',
+    Domain: 'DeepLearning'
+  },
+  {
+    _id: ObjectId('68dcaf8ce32e7f9a7ac73c01'),
+    id: 8,
+    name: 'Suyash',
+    RollNo: 39036,
+    cgpa: 10
+  }
+]
+
+test> db.Student.update({id:3},{$set:{cgpa:6.3}});
+DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+test> db.Student.insertMany([{id:9,name:'Vinayk',RollNo:39051,cgpa:7.18},{id:10,name:'Vicky',RollNo:39047,cgpa:9.18}]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('68e6374a2aad6e3a9dc73bf8'),
+    '1': ObjectId('68e6374a2aad6e3a9dc73bf9')
+  }
+}
+
+db.Student.find({cgpa: {$gt:9.00}});
+[
+  {
+    _id: ObjectId('68dcacafe32e7f9a7ac73bf8'),
+    id: 1,
+    name: 'Om',
+    RollNo: 39021,
+    cgpa: 9.23
+  },
+  {
+    _id: ObjectId('68dcad21e32e7f9a7ac73bf9'),
+    id: 2,
+    name: 'Prashant',
+    RollNo: 39024,
+    cgpa: 9.5
+  },
+  {
+    _id: ObjectId('68dcad77e32e7f9a7ac73bfb'),
+    id: 4,
+    name: 'Viraj',
+    RollNo: 38028,
+    cgpa: 9.73
+  },
+  {
+    _id: ObjectId('68dcaf8ce32e7f9a7ac73c01'),
+    id: 8,
+    name: 'Suyash',
+    RollNo: 39036,
+    cgpa: 10
+  },
+  {
+    _id: ObjectId('68e6374a2aad6e3a9dc73bf9'),
+    id: 10,
+    name: 'Vicky',
+    RollNo: 39047,
+    cgpa: 9.18
+  }
+]
+
+test> db.Student.find().pretty();
+[
+  {
+    _id: ObjectId('68dcacafe32e7f9a7ac73bf8'),
+    id: 1,
+    name: 'Om',
+    RollNo: 39021,
+    cgpa: 9.23
+  },
+  {
+    _id: ObjectId('68dcad21e32e7f9a7ac73bf9'),
+    id: 2,
+    name: 'Prashant',
+    RollNo: 39024,
+    cgpa: 9.5
+  },
+  {
+    _id: ObjectId('68dcad55e32e7f9a7ac73bfa'),
+    id: 3,
+    name: 'Parul',
+    RollNo: 39029,
+    cgpa: 6.3
+  },
+  {
+    _id: ObjectId('68dcad77e32e7f9a7ac73bfb'),
+    id: 4,
+    name: 'Viraj',
+    RollNo: 38028,
+    cgpa: 9.73
+  },
+  {
+    _id: ObjectId('68dcae12e32e7f9a7ac73bfd'),
+    id: 6,
+    name: 'Omkar',
+    RollNo: 39027,
+    cgpa: 8.23
+  },
+  {
+    _id: ObjectId('68dcaf8ce32e7f9a7ac73c00'),
+    id: 7,
+    name: 'Vikarant',
+    RollNo: 39043,
+    cgpa: 8.11,
+    branch: 'AIDS',
+    Domain: 'DeepLearning'
+  },
+  {
+    _id: ObjectId('68dcaf8ce32e7f9a7ac73c01'),
+    id: 8,
+    name: 'Suyash',
+    RollNo: 39036,
+    cgpa: 10
+  },
+  {
+    _id: ObjectId('68e6374a2aad6e3a9dc73bf8'),
+    id: 9,
+    name: 'Vinayk',
+    RollNo: 39051,
+    cgpa: 7.18
+  },
+  {
+    _id: ObjectId('68e6374a2aad6e3a9dc73bf9'),
+    id: 10,
+    name: 'Vicky',
+    RollNo: 39047,
+    cgpa: 9.18
+  }
+]
+

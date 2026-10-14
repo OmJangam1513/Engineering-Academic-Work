@@ -1,0 +1,57 @@
+public class Calci
+{
+    public Decimal num1(get; set;);
+    public Decimal num2(get; set;);
+    public Decimal result(get; set;);
+    
+    public void add()
+    {
+        result = num1 + num2;
+    }
+    
+    public void sub()
+    {
+        result = num1 - num2;
+    }
+    public void mul()
+    {
+        result = num1 * num2;
+    }
+    public void div()
+    {   
+        if(num2!=0)
+        {
+            result = num1 / num2;
+        }
+        else
+        {
+            result = 0;
+        }
+    
+    }
+}
+
+
+<apex:page contrpller="calci">
+    <apex:form>
+        <apex:pageBlock title = ' calci'>
+        
+        <apex:panelGrid>
+            Number1 = <apex:inputText value = "{!num1}"/>
+            Number2 = <apex:inputText value = "{!num2}"/>
+        </apex:panelGrid>
+        
+        <apex:outputPanel id='resultPanel'>
+            Result = <apex:outputPanel value="{!result}"></apex:outputPanel>
+        </apex:outputPanel>
+
+        <br/>
+
+        <apex:commandButton action="{!add}" value = "Addition" reRender="resultPanel"> 
+        <apex:commandButton action="{!sub}" value = "Subtraction" reRender="resultPanel">
+        <apex:commandButton action="{!mul}" value = "Multiplication" reRender="resultPanel">
+        <apex:commandButton action="{!div}" value = "Division" reRender="resultPanel">
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

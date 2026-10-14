@@ -1,0 +1,204 @@
+import tkinter as tk
+from tkinter import messagebox, ttk
+import oracledb
+
+
+# ------------------------------
+# Oracle Database Connection
+# ------------------------------
+try:
+    connection = oracledb.connect(
+        user="charity",            # 🔹 your username
+        password="prachi06",          # 🔹 your password
+        dsn="localhost:1521/XEPDB1"    # 🔹 your host/service name (change if needed)
+    )
+    cursor = connection.cursor()
+except Exception as e:
+    print("Error connecting to Oracle:", e)
+    exit(1)
+
+
+# ------------------------------
+# GUI Application
+# ------------------------------
+class OracleGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Oracle CRUD GUI")
+        self.root.geometry("650x450")
+        self.root.resizable(False, False)
+
+        # ---------- Variables ----------
+        self.name_var = tk.StringVar()
+        self.email_var = tk.StringVar()
+        self.phone_var = tk.StringVar()
+        self.search_var = tk.StringVar()
+
+        # ---------- Labels ----------
+        tk.Label(root, text="Name:", font=('Arial', 11)).place(x=30, y=30)
+        tk.Label(root, text="Email:", font=('Arial', 11)).place(x=30, y=70)
+        tk.Label(root, text="Phone:", font=('Arial', 11)).place(x=30, y=110)
+
+        # ---------- Entry Boxes ----------
+        tk.Entry(root, textvariable=self.name_var, width=30).place(x=100, y=30)
+        tk.Entry(root, textvariable=self.email_var, width=30).place(x=100, y=70)
+        tk.Entry(root, textvariable=self.phone_var, width=30).place(x=100, y=110)
+
+        # ---------- Buttons ----------
+        tk.Button(root, text="Add", width=10, command=self.add_record).place(x=30, y=160)
+        tk.Button(root, text="Update", width=10, command=self.update_record).place(x=130, y=160)
+        tk.Button(root, text="Delete", width=10, command=self.delete_record).place(x=230, y=160)
+        tk.Button(root, text="Display All", width=10, command=self.display_records).place(x=330, y=160)
+
+        # ---------- Search ----------
+        tk.Label(root, text="Search by Name/Email:", font=('Arial', 10)).place(x=30, y=210)
+        tk.Entry(root, textvariable=self.search_var, width=25).place(x=190, y=210)
+        tk.Button(root, text="Search", width=10, command=self.search_record).place(x=400, y=207)
+        tk.Button(root, text="Clear", width=10, command=self.clear_search).place(x=500, y=207)
+
+        # ---------- Table (Treeview) ----------
+        self.tree = ttk.Treeview(root, columns=("Name", "Email", "Phone"), show='headings', height=8)
+        self.tree.place(x=30, y=250, width=580, height=170)
+        self.tree.heading("Name", text="Name")
+        self.tree.heading("Email", text="Email")
+        self.tree.heading("Phone", text="Phone")
+
+        self.tree.column("Name", width=160)
+        self.tree.column("Email", width=200)
+        self.tree.column("Phone", width=160)
+
+        self.tree.bind("<ButtonRelease-1>", self.select_record)
+
+        # ---------- Status ----------
+        self.status_label = tk.Label(root, text="", fg="blue", font=('Arial', 10))
+        self.status_label.place(x=30, y=430)
+
+        # Display initial records
+        self.display_records()
+
+    # ------------------ CRUD Operations ------------------
+
+    def add_record(self):
+        name = self.name_var.get().strip()
+        email = self.email_var.get().strip()
+        phone = self.phone_var.get().strip()
+
+        if not name:
+            messagebox.showwarning("Input Error", "Name is required!")
+            return
+
+        try:
+            cursor.execute("INSERT INTO students (name, email, phone) VALUES (:1, :2, :3)",
+                           (name, email, phone))
+            connection.commit()
+            self.display_records()
+            self.clear_fields()
+            messagebox.showinfo("Success", "Record added successfully!")
+        except Exception as e:
+            messagebox.showerror("Database Error", str(e))
+
+    def update_record(self):
+        selected = self.tree.selection()
+        if not selected:
+            messagebox.showwarning("Warning", "Please select a record to update!")
+            return
+
+        item = self.tree.item(selected[0])
+        old_name = item["values"][0]
+
+        try:
+            cursor.execute("""
+                UPDATE students
+                SET name = :1, email = :2, phone = :3
+                WHERE name = :4
+            """, (self.name_var.get(), self.email_var.get(), self.phone_var.get(), old_name))
+            connection.commit()
+            self.display_records()
+            self.clear_fields()
+            messagebox.showinfo("Updated", "Record updated successfully!")
+        except Exception as e:
+            messagebox.showerror("Database Error", str(e))
+
+    def delete_record(self):
+        selected = self.tree.selection()
+        if not selected:
+            messagebox.showwarning("Warning", "Please select a record to delete!")
+            return
+
+        item = self.tree.item(selected[0])
+        name = item["values"][0]
+
+        try:
+            cursor.execute("DELETE FROM students WHERE name = :1", (name,))
+            connection.commit()
+            self.display_records()
+            self.clear_fields()
+            messagebox.showinfo("Deleted", "Record deleted successfully!")
+        except Exception as e:
+            messagebox.showerror("Database Error", str(e))
+
+    def display_records(self):
+        """Fetch all records and show in Treeview."""
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+
+        cursor.execute("SELECT name, email, phone FROM students ORDER BY name")
+        records = cursor.fetchall()
+        for rec in records:
+            self.tree.insert("", "end", values=rec)
+
+        cursor.execute("SELECT COUNT(*) FROM students")
+        total = cursor.fetchone()[0]
+        self.status_label.config(text=f"Total records: {total}")
+
+    def search_record(self):
+        """Search by name or email."""
+        query = self.search_var.get().strip()
+        if not query:
+            messagebox.showwarning("Warning", "Enter search text!")
+            return
+
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+
+        cursor.execute("""
+            SELECT name, email, phone FROM students
+            WHERE LOWER(name) LIKE :1 OR LOWER(email) LIKE :1
+        """, (f"%{query.lower()}%",))
+        results = cursor.fetchall()
+
+        if results:
+            for rec in results:
+                self.tree.insert("", "end", values=rec)
+            self.status_label.config(text="Search results displayed.")
+        else:
+            messagebox.showinfo("No Results", "No matching records found.")
+
+    def clear_search(self):
+        """Clear search field and reload records."""
+        self.search_var.set("")
+        self.display_records()
+
+    def select_record(self, event):
+        """Load selected record into entry fields."""
+        selected = self.tree.selection()
+        if selected:
+            item = self.tree.item(selected[0])
+            self.name_var.set(item["values"][0])
+            self.email_var.set(item["values"][1])
+            self.phone_var.set(item["values"][2])
+
+    def clear_fields(self):
+        """Clear entry fields."""
+        self.name_var.set("")
+        self.email_var.set("")
+        self.phone_var.set("")
+
+
+# -------------------------------
+# Run the GUI
+# -------------------------------
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = OracleGUI(root)
+    root.mainloop()

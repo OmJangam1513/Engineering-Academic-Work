@@ -1,0 +1,239 @@
+SQL> create table branch( branch_name varchar2(20),branch_city varchar2(20),assets decimal(12,2) check( assets >=0),primary key(branch_name));
+
+Table created.
+
+SQL> create table Account( acc_no number(20),branch_name varchar2(20),balance decimal(10,2) check (balance >= 0),primary key(acc_no),foreign key(branch_name) References branch(branch_name));
+
+Table created.
+
+SQL> create table customer(cust_name varchar2(20),cust_street varchar2(20),cust_city varchar2(20),primary key (cust_name));
+
+Table created.
+
+SQL> create table Depositor( cust_name Varchar(20),acc_no number(20), primary key (cust_name,acc_no),foreign key(cust_name) references customer(cust_name),foreign key(acc_no) references account(acc_no));
+
+Table created.
+
+SQL> create table Loan(loan number(20), branch_name varchar2(20),amount decimal(10,2) check (amount>=0),foreign key (branch_name) references branch(branch_name));
+
+Table created.
+
+SQL> alter table loan rename column loan to loan_no;
+
+Table altered.
+
+SQL> desc loan;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ LOAN_NO                                            NUMBER(20)
+ BRANCH_NAME                                        VARCHAR2(20)
+ AMOUNT                                             NUMBER(10,2)
+
+SQL> alter table loan add constraint pk_loan_no Primary key(Loan_no);
+
+Table altered.
+
+SQL> create table borrowers(cust_name varchar2(20), loan_no number(20),primary key(cust_name,loan_no),foreign key (loan_no) references loan(loan_no));
+
+Table created.
+
+SQL> INSERT INTO Branch VALUES ('Akurdi', 'Pune', 800000);
+
+1 row created.
+
+SQL> INSERT INTO Branch VALUES ('Shivaji Nagar', 'Pune', 1200000);
+
+1 row created.
+
+SQL> INSERT INTO Branch VALUES ('Nigdi', 'Pune', 600000);
+
+1 row created.
+
+SQL> INSERT INTO Account VALUES (101, 'Akurdi', 15000);
+
+1 row created.
+
+SQL> INSERT INTO Account VALUES (102, 'Shivaji Nagar', 18000);
+
+1 row created.
+
+SQL> INSERT INTO Account VALUES (103, 'Nigdi', 9000);
+
+1 row created.
+
+SQL> INSERT INTO Account VALUES (104, 'Akurdi', 13000);
+
+1 row created.
+
+SQL> INSERT INTO Customer VALUES ('Om', 'MG Road', 'Pune');
+
+1 row created.
+
+SQL> INSERT INTO Customer VALUES ('Prachi', 'FC Road', 'Pune');
+
+1 row created.
+
+SQL> INSERT INTO Customer VALUES ('Mugdha', 'Nigdi', 'Pune');
+
+1 row created.
+
+SQL> INSERT INTO Customer VALUES ('Shashank', 'Akurdi', 'Pune');
+
+1 row created.
+
+SQL> INSERT INTO Depositor VALUES ('Om', 101);
+
+1 row created.
+
+SQL> INSERT INTO Depositor VALUES ('Prachi', 102);
+
+1 row created.
+
+SQL> INSERT INTO Depositor VALUES ('Mugdha', 103);
+
+1 row created.
+
+SQL> INSERT INTO Depositor VALUES ('Shashank', 104);
+
+1 row created.
+
+SQL> INSERT INTO Loan VALUES (201, 'Akurdi', 10000);
+
+1 row created.
+
+SQL> INSERT INTO Loan VALUES (202, 'Shivaji Nagar', 15000);
+
+1 row created.
+
+SQL> INSERT INTO Loan VALUES (203, 'Nigdi', 1300);
+
+1 row created.
+
+SQL> INSERT INTO Loan VALUES (204, 'Akurdi', 14000);
+
+1 row created.
+
+SQL> INSERT INTO Borrowers VALUES ('Om', 201);
+
+1 row created.
+
+SQL> INSERT INTO Borrowers VALUES ('Prachi', 202);
+
+1 row created.
+
+SQL> INSERT INTO Borrowers VALUES ('Shashank', 204);
+
+1 row created.
+
+SQL> SELECT DISTINCT branch_name FROM Loan;
+
+BRANCH_NAME
+--------------------
+Akurdi
+Shivaji Nagar
+Nigdi
+
+SQL> SELECT loan_no
+  2  FROM Loan
+  3  WHERE branch_name = 'Shivaji Nagar' AND amount > 12000;
+
+   LOAN_NO
+----------
+       202
+
+SQL> SELECT c.cust_name, l.loan_no, l.amount
+  2  FROM Customer c
+  3  JOIN Borrowers b ON c.cust_name = b.cust_name
+  4  JOIN Loan l ON b.loan_no = l.loan_no;
+
+CUST_NAME               LOAN_NO     AMOUNT
+-------------------- ---------- ----------
+Om                          201      10000
+Prachi                      202      15000
+Shashank                    204      14000
+
+SQL> SELECT c.cust_name
+  2  FROM Customer c
+  3  JOIN Borrowers b ON c.cust_name = b.cust_name JOIN Loan l ON b.loan_no = l.loan_no
+  4  WHERE l.branch_name = 'Akurdi'
+  5  ORDER BY c.cust_name;
+
+CUST_NAME
+--------------------
+Om
+Shashank
+
+SQL> SELECT cust_name FROM Depositor
+  2  UNION
+  3  SELECT cust_name FROM Borrowers;
+
+CUST_NAME
+--------------------
+Mugdha
+Om
+Prachi
+Shashank
+
+SQL> SELECT d.cust_name
+  2  FROM Depositor d
+  3  INTERSECT
+  4  SELECT b.cust_name
+  5  FROM Borrowers b;
+
+CUST_NAME
+--------------------
+Om
+Prachi
+Shashank
+
+SQL> SELECT d.cust_name
+  2  FROM Depositor d
+  3  MINUS
+  4  SELECT b.cust_name
+  5  FROM Borrowers b;
+
+CUST_NAME
+--------------------
+Mugdha
+
+SQL> SELECT AVG(balance) AS avg_balance
+  2  FROM Account
+  3  WHERE branch_name = 'Akurdi';
+
+AVG_BALANCE
+-----------
+      14000
+
+SQL> SELECT branch_name
+  2  FROM Account
+  3  GROUP BY branch_name
+  4  HAVING AVG(balance) > 12000;
+
+BRANCH_NAME
+--------------------
+Akurdi
+Shivaji Nagar
+
+SQL> SELECT COUNT(*) AS total_customers
+  2  FROM Customer;
+
+TOTAL_CUSTOMERS
+---------------
+              4
+
+SQL> SELECT SUM(amount) AS total_loan_amount
+  2  FROM Loan;
+
+TOTAL_LOAN_AMOUNT
+-----------------
+            40300
+
+SQL> DELETE FROM Loan
+  2  WHERE amount BETWEEN 1300 AND 1500;
+
+1 row deleted.
+
+SQL> DELETE FROM Branch
+  2  WHERE branch_city = 'Nigdi';
+
+0 rows deleted.

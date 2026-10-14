@@ -1,0 +1,372 @@
+SQL> desc customer;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ CUST_ID                                   NOT NULL NUMBER(5)
+ CUST_NAME                                          VARCHAR2(10)
+ CUST_CITY                                          VARCHAR2(10)
+ CUST_STREET                                        VARCHAR2(10)
+
+SQL> insert into customer values(11,'sanket','pune','karve');
+
+1 row created.
+
+SQL> select * from customer;
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         1 om         satara     kesarkar
+         2 omkar      pune       vikas
+         3 viraj      pune       JM
+         4 raj        pune       FC
+         5 prashant   pune       JM
+         6 shashank   jalgao     pachola
+         7 atharva    pune       bhid
+         8 pratik     pune       anand
+         9 simon      pune       FC
+        10 carlton    delhi      VJ
+        11 sanket     pune       karve
+
+11 rows selected.
+
+SQL> update customer set cust_street='viman' where cust_id=9;
+
+1 row updated.
+
+SQL> delete from customer where cust_id=11;
+
+1 row deleted.
+
+SQL> select * from customer;
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         1 om         satara     kesarkar
+         2 omkar      pune       vikas
+         3 viraj      pune       JM
+         4 raj        pune       FC
+         5 prashant   pune       JM
+         6 shashank   jalgao     pachola
+         7 atharva    pune       bhid
+         8 pratik     pune       anand
+         9 simon      pune       viman
+        10 carlton    delhi      VJ
+
+10 rows selected.
+
+SQL> select * from customer where cust_id>5;
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         6 shashank   jalgao     pachola
+         7 atharva    pune       bhid
+         8 pratik     pune       anand
+         9 simon      pune       viman
+        10 carlton    delhi      VJ
+
+SQL> select * from customer where cust_city='pune';
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         2 omkar      pune       vikas
+         3 viraj      pune       JM
+         4 raj        pune       FC
+         5 prashant   pune       JM
+         7 atharva    pune       bhid
+         8 pratik     pune       anand
+         9 simon      pune       viman
+
+7 rows selected.
+
+SQL> select * from customer where cust_city!='pune';
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         1 om         satara     kesarkar
+         6 shashank   jalgao     pachola
+        10 carlton    delhi      VJ
+
+SQL> select * from customer where cust_id>=8;
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         8 pratik     pune       anand
+         9 simon      pune       viman
+        10 carlton    delhi      VJ
+
+SQL> select * from customer where cust_id<=3;
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         1 om         satara     kesarkar
+         2 omkar      pune       vikas
+         3 viraj      pune       JM
+
+SQL> select * from customer where cust_id<3;
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         1 om         satara     kesarkar
+         2 omkar      pune       vikas
+
+SQL> select * from customer where cust_name like 'p%';
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         5 prashant   pune       JM
+         8 pratik     pune       anand
+
+SQL> select c.cust_name,e.emp_name from customer c,employee e;
+
+CUST_NAME  EMP_NAME
+---------- ----------
+om         vaishnavi
+om         vinayk
+om         vijay
+om         priyanka
+om         vikrant
+om         rajesh
+om         Shiv
+om         Shivam
+om         prathamesh
+om         arjun
+omkar      vaishnavi
+
+CUST_NAME  EMP_NAME
+---------- ----------
+omkar      vinayk
+omkar      vijay
+omkar      priyanka
+omkar      vikrant
+omkar      rajesh
+omkar      Shiv
+omkar      Shivam
+omkar      prathamesh
+omkar      arjun
+viraj      vaishnavi
+viraj      vinayk
+
+CUST_NAME  EMP_NAME
+---------- ----------
+viraj      vijay
+viraj      priyanka
+viraj      vikrant
+viraj      rajesh
+viraj      Shiv
+viraj      Shivam
+viraj      prathamesh
+viraj      arjun
+raj        vaishnavi
+raj        vinayk
+raj        vijay
+
+CUST_NAME  EMP_NAME
+---------- ----------
+raj        priyanka
+raj        vikrant
+raj        rajesh
+raj        Shiv
+raj        Shivam
+raj        prathamesh
+raj        arjun
+prashant   vaishnavi
+prashant   vinayk
+prashant   vijay
+prashant   priyanka
+
+CUST_NAME  EMP_NAME
+---------- ----------
+prashant   vikrant
+prashant   rajesh
+prashant   Shiv
+prashant   Shivam
+prashant   prathamesh
+prashant   arjun
+shashank   vaishnavi
+shashank   vinayk
+shashank   vijay
+shashank   priyanka
+shashank   vikrant
+
+CUST_NAME  EMP_NAME
+---------- ----------
+shashank   rajesh
+shashank   Shiv
+shashank   Shivam
+shashank   prathamesh
+shashank   arjun
+atharva    vaishnavi
+atharva    vinayk
+atharva    vijay
+atharva    priyanka
+atharva    vikrant
+atharva    rajesh
+
+CUST_NAME  EMP_NAME
+---------- ----------
+atharva    Shiv
+atharva    Shivam
+atharva    prathamesh
+atharva    arjun
+pratik     vaishnavi
+pratik     vinayk
+pratik     vijay
+pratik     priyanka
+pratik     vikrant
+pratik     rajesh
+pratik     Shiv
+
+CUST_NAME  EMP_NAME
+---------- ----------
+pratik     Shivam
+pratik     prathamesh
+pratik     arjun
+simon      vaishnavi
+simon      vinayk
+simon      vijay
+simon      priyanka
+simon      vikrant
+simon      rajesh
+simon      Shiv
+simon      Shivam
+
+CUST_NAME  EMP_NAME
+---------- ----------
+simon      prathamesh
+simon      arjun
+carlton    vaishnavi
+carlton    vinayk
+carlton    vijay
+carlton    priyanka
+carlton    vikrant
+carlton    rajesh
+carlton    Shiv
+carlton    Shivam
+carlton    prathamesh
+
+CUST_NAME  EMP_NAME
+---------- ----------
+carlton    arjun
+
+100 rows selected.
+
+SQL> SELECT cust_id AS id, cust_name AS name
+  2  FROM customer
+  3  UNION ALL
+  4  SELECT emp_id AS id, emp_name AS name
+  5  FROM employee;
+
+        ID NAME
+---------- ----------
+         1 om
+         2 omkar
+         3 viraj
+         4 raj
+         5 prashant
+         6 shashank
+         7 atharva
+         8 pratik
+         9 simon
+        10 carlton
+       501 vaishnavi
+
+        ID NAME
+---------- ----------
+       502 vinayk
+       503 vijay
+       504 priyanka
+       505 vikrant
+       506 rajesh
+       507 Shiv
+       508 Shivam
+       509 prathamesh
+       510 arjun
+
+20 rows selected.
+
+SQL> SELECT cust_id AS id, cust_name AS name
+  2  FROM customer
+  3  INTERSECT
+  4  SELECT emp_id AS id, emp_name AS name
+  5  FROM employee;
+
+no rows selected
+
+SQL> SELECT cust_id AS id, cust_name AS name
+  2  FROM customer
+  3  UNION
+  4  SELECT emp_id AS id, emp_name AS name
+  5  FROM employee;
+
+        ID NAME
+---------- ----------
+         1 om
+         2 omkar
+         3 viraj
+         4 raj
+         5 prashant
+         6 shashank
+         7 atharva
+         8 pratik
+         9 simon
+        10 carlton
+       501 vaishnavi
+
+        ID NAME
+---------- ----------
+       502 vinayk
+       503 vijay
+       504 priyanka
+       505 vikrant
+       506 rajesh
+       507 Shiv
+       508 Shivam
+       509 prathamesh
+       510 arjun
+
+20 rows selected.
+
+SQL> select min(cust_id) from customer;
+
+MIN(CUST_ID)
+------------
+           1
+
+SQL> select max(cust_id) from customer;
+
+MAX(CUST_ID)
+------------
+          10
+
+SQL> select count(*) from customersle;
+
+  COUNT(*)
+----------
+        10
+
+SQL> select sum(cust_id) from customer;
+
+SUM(CUST_ID)
+------------
+          55
+
+SQL> select avg(cust_id) from customer;
+
+AVG(CUST_ID)
+------------
+         5.5
+
+SQL> select * from customer where cust_id=1 and cust_name='om';
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         1 om         satara     kesarkar
+
+SQL> select * from customer where cust_id between 1 and 5;
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         1 om         satara     kesarkar
+         2 omkar      pune       vikas
+         3 viraj      pune       JM
+         4 raj        pune       FC
+         5 prashant   pune       JM

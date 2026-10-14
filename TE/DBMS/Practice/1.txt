@@ -1,0 +1,109 @@
+SQL> create table student(RollNo number(5),Name varchar2(20),Attendance number(3),primary key(RollNo));
+
+Table created.
+
+SQL> desc student;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ROLLNO                                    NOT NULL NUMBER(5)
+ NAME                                               VARCHAR2(20)
+ ATTENDANCE                                         NUMBER(3)
+
+SQL> insert into student values(39021,'Tanay',76);
+
+1 row created.
+
+SQL> insert into student values(39022,'Om',100);
+
+1 row created.
+
+SQL> insert into student values(39023,'Utkarsha',70);
+
+1 row created.
+
+SQL> insert into student values(39024,'Prashant',83);
+
+1 row created.
+
+SQL> insert into student values(39025,'Prathmesh',53);
+
+1 row created.
+
+SQL> insert into student values(39026,'Vikrant',93);
+
+1 row created.
+
+SQL> insert into student values(39027,'omkar',68);
+
+1 row created.
+
+SQL> alter table student add (status varchar2(16));
+
+Table altered.
+
+SQL> select * from student;
+
+    ROLLNO NAME                 ATTENDANCE STATUS
+---------- -------------------- ---------- ----------------
+     39021 Tanay                        76
+     39022 Om                          100
+     39023 Utkarsha                     70
+     39024 Prashant                     83
+     39025 Prathmesh                    53
+     39026 Vikrant                      93
+     39027 omkar                        68
+
+7 rows selected.
+
+SQL> DECLARE
+  2    vRollNo Student.RollNo%TYPE;
+  3    vAttendance Student.Attendance%TYPE;
+  4  BEGIN
+  5    vRollNo := &Enter_Roll_No;
+  6
+  7    SELECT Attendance INTO vAttendance
+  8    FROM Student
+  9    WHERE RollNo = vRollNo;
+ 10
+ 11    IF (vAttendance < 75) THEN
+ 12        dbms_output.put_line('Term Not Granted');
+ 13        UPDATE Student SET Status = 'Detained' WHERE RollNo = vRollNo;
+ 14    ELSE
+ 15        dbms_output.put_line('Term Granted');
+ 16        UPDATE Student SET Status = 'Not Detained' WHERE RollNo = vRollNo;
+ 17    END IF;
+ 18  END;
+ 19  /
+Enter value for enter_roll_no: 39021
+old   5:   vRollNo := &Enter_Roll_No;
+new   5:   vRollNo := 39021;
+
+PL/SQL procedure successfully completed.
+
+SQL> /
+Enter value for enter_roll_no: 39025
+old   5:   vRollNo := &Enter_Roll_No;
+new   5:   vRollNo := 39025;
+
+PL/SQL procedure successfully completed.
+
+SQL> /
+Enter value for enter_roll_no: 39027
+old   5:   vRollNo := &Enter_Roll_No;
+new   5:   vRollNo := 39027;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from student;
+
+    ROLLNO NAME                 ATTENDANCE STATUS
+---------- -------------------- ---------- ----------------
+     39021 Tanay                        76 Not Detained
+     39022 Om                          100
+     39023 Utkarsha                     70
+     39024 Prashant                     83
+     39025 Prathmesh                    53 Detained
+     39026 Vikrant                      93
+     39027 omkar                        68 Detained
+
+7 rows selected.

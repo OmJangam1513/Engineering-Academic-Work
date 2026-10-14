@@ -1,0 +1,122 @@
+SQL> CREATE TABLE O_RollCall (
+  2      roll_no NUMBER(2),
+  3      name VARCHAR2(25),
+  4      age NUMBER(2),
+  5      marks NUMBER(3)
+  6  );
+
+Table created.
+
+SQL>
+SQL> INSERT INTO O_RollCall VALUES (21, 'Om', 20, 190);
+
+1 row created.
+
+SQL> INSERT INTO O_RollCall VALUES (27, 'Shashank', 20, 100);
+
+1 row created.
+
+SQL> INSERT INTO O_RollCall VALUES (37, 'Om', 20, 190);
+
+1 row created.
+
+SQL> INSERT INTO O_RollCall VALUES (42, 'Prashant', 19, 187);
+
+1 row created.
+
+SQL> INSERT INTO O_RollCall VALUES (1, 'Arjun', 20, 175);
+
+1 row created.
+
+SQL> CREATE TABLE N_RollCall (
+  2      roll_no NUMBER(2),
+  3      name VARCHAR2(25),
+  4      age NUMBER(2),
+  5      marks NUMBER(3)
+  6  );
+
+Table created.
+
+SQL> INSERT INTO N_RollCall VALUES (27, 'Shashank', 20, 100);
+
+1 row created.
+
+SQL> INSERT INTO N_RollCall VALUES (29, 'Om', 20, 190);
+
+1 row created.
+
+SQL> INSERT INTO N_RollCall VALUES (26, 'Prashant', 20, 185);
+
+1 row created.
+
+SQL> INSERT INTO N_RollCall VALUES (4, 'Shravani', 20, 179);
+
+1 row created.
+
+SQL> SELECT * FROM O_RollCall;
+
+   ROLL_NO NAME                             AGE      MARKS
+---------- ------------------------- ---------- ----------
+        21 Om                                20        190
+        27 Shashank                          20        100
+        37 Om                                20        190
+        42 Prashant                          19        187
+         1 Arjun                             20        175
+
+SQL> SELECT * FROM N_RollCall;
+
+   ROLL_NO NAME                             AGE      MARKS
+---------- ------------------------- ---------- ----------
+        27 Shashank                          20        100
+        29 Om                                20        190
+        26 Prashant                          20        185
+         4 Shravani                          20        179
+
+SQL> SET SERVEROUTPUT ON;
+
+SQL> DECLARE
+  2      CURSOR c1(rno O_RollCall.roll_no%TYPE) IS
+  3          SELECT roll_no, name, age, marks
+  4          FROM O_RollCall
+  5          WHERE roll_no = rno;
+  6      v_rec O_RollCall%ROWTYPE;
+  7  BEGIN
+  8      FOR rec IN (SELECT roll_no FROM O_RollCall)
+  9      LOOP
+ 10          DECLARE
+ 11              v_count NUMBER;
+ 12          BEGIN
+ 13              SELECT COUNT(*) INTO v_count
+ 14              FROM N_RollCall
+ 15              WHERE roll_no = rec.roll_no;
+ 16              IF v_count = 0 THEN
+ 17                  OPEN c1(rec.roll_no);
+ 18                  FETCH c1 INTO v_rec;
+ 19                  IF c1%FOUND THEN
+ 20                      INSERT INTO N_RollCall VALUES (v_rec.roll_no, v_rec.name, v_rec.age, v_rec.marks);
+ 21                      DBMS_OUTPUT.PUT_LINE('Inserted Roll No: ' || v_rec.roll_no);
+ 22                  END IF;
+ 23                  CLOSE c1;
+ 24              END IF;
+ 25          END;
+ 26      END LOOP;
+ 27      DBMS_OUTPUT.PUT_LINE('Merge operation completed successfully.');
+ 28  END;
+ 29  /
+Merge operation completed successfully.
+
+PL/SQL procedure successfully completed.
+
+SQL>
+SQL> SELECT * FROM N_RollCall;
+
+   ROLL_NO NAME                             AGE      MARKS
+---------- ------------------------- ---------- ----------
+        27 Shashank                          20        100
+        29 Om                                20        190
+        26 Prashant                          20        185
+         4 Shravani                          20        179
+        42 Prashant                          19        187
+         1 Arjun                             20        175
+        21 Om                                20        190
+        37 Om                                20        190

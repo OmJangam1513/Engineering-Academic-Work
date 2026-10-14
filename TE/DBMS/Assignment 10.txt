@@ -1,0 +1,111 @@
+db.Student.aggregate([
+  { 
+    $group: { 
+      _id: null, 
+      Average_CGPA: { $avg: "$cgpa" } 
+    } 
+  }
+]);
+
+[
+  { _id: null, Average_CGPA: 8.82 }
+]
+
+db.Student.aggregate([
+  { $sort: { cgpa: -1 } },
+  { $limit: 1 },
+  { $project: { _id: 0, name: 1, RollNo: 1, cgpa: 1 } }
+]);
+
+[
+  { _id: null, Average_CGPA: 8.82 }
+]
+
+db.Student.aggregate([
+  { $sort: { cgpa: -1 } },
+  { $limit: 1 },
+  { $project: { _id: 0, name: 1, RollNo: 1, cgpa: 1 } }
+]);
+
+[
+  { name: "Suyash", RollNo: 39036, cgpa: 10 }
+]
+
+db.Student.aggregate([
+  {
+    $bucket: {
+      groupBy: "$cgpa",
+      boundaries: [0, 7, 8, 9, 10, 11],
+      default: "Other",
+      output: {
+        count: { $sum: 1 },
+        students: { $push: "$name" }
+      }
+    }
+  }
+]);
+
+[
+  { _id: 7, count: 1, students: [ "Vinayk" ] },
+  { _id: 8, count: 2, students: [ "Parul", "Vikarant" ] },
+  { _id: 9, count: 4, students: [ "Om", "Prashant", "Viraj", "Vicky" ] },
+  { _id: 10, count: 1, students: [ "Suyash" ] }
+]
+
+db.Student.aggregate([
+  { $project: { _id: 0, name: 1, cgpa: 1 } },
+  { $sort: { cgpa: -1 } }
+]);
+
+[
+  { name: "Suyash", cgpa: 10 },
+  { name: "Viraj", cgpa: 9.73 },
+  { name: "Prashant", cgpa: 9.5 },
+  { name: "Vicky", cgpa: 9.18 },
+  { name: "Om", cgpa: 9.23 },
+  { name: "Omkar", cgpa: 8.23 },
+  { name: "Vikarant", cgpa: 8.11 },
+  { name: "Vinayk", cgpa: 7.18 },
+  { name: "Parul", cgpa: 6.3 }
+]
+
+db.Student.createIndex({ cgpa: 1 });
+
+"cgpa_1"
+
+db.Student.getIndexes();
+
+[
+  {
+    v: 2,
+    key: { _id: 1 },
+    name: "_id_"
+  },
+  {
+    v: 2,
+    key: { cgpa: 1 },
+    name: "cgpa_1"
+  }
+]
+
+db.Student.find({ cgpa: { $gt: 9 } }).explain("executionStats");
+
+{
+  queryPlanner: {
+    winningPlan: {
+      stage: 'IXSCAN',
+      indexName: 'cgpa_1'
+    }
+  },
+  executionStats: {
+    totalDocsExamined: 5,
+    nReturned: 5
+  }
+}
+
+db.Student.dropIndex("cgpa_1");
+
+{ nIndexesWas: 2, ok: 1 }
+
+
+

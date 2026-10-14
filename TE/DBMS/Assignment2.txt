@@ -1,0 +1,243 @@
+SQL> create table customer(cust_id number(5),cust_name varchar2(10),cust_city varchar2(10),cust_street varchar(10),primary key(cust_id));
+
+Table created.
+
+SQL> insert into customer values(1,'om','satara','kesarkar');
+
+1 row created.
+
+SQL> insert into customer values(2,'omkar','pune','vikas');
+
+1 row created.
+
+SQL> insert into customer values(3,'viraj','pune','JM');
+
+1 row created.
+
+SQL> insert into customer values(4,'raj','pune','FC');
+
+1 row created.
+
+SQL> insert into customer values(5,'prashant','pune','JM');
+
+1 row created.
+
+SQL> insert into customer values(6,'shashank','jalgao','pachola');
+
+1 row created.
+
+SQL> insert into customer values(7,'atharva','pune','bhid');
+
+1 row created.
+
+SQL> insert into customer values(8,'pratik','pune','anand');
+
+1 row created.
+
+SQL> insert into customer values(9,'simon','pune','FC');
+
+1 row created.
+
+SQL> insert into customer values(10,'carlton','delhi','VJ');
+
+1 row created.
+
+SQL>  create table employee(emp_id number(5),emp_name varchar2(10),start_date date,telephone_number number(10));
+
+Table created.
+
+SQL> insert into employee values(501,'vaishnavi',to_date('15-09-2024','DD-MM-YYYY'),7732942150);
+
+1 row created.
+
+SQL> insert into employee values(501,'vinayk',to_date('1-09-2024','DD-MM-YYYY'),7454942150);
+
+1 row created.
+
+SQL> update employee set emp_id=502 where emp_name='vinayk';
+
+1 row updated.
+
+SQL> select * from employee;
+
+    EMP_ID EMP_NAME   START_DAT TELEPHONE_NUMBER
+---------- ---------- --------- ----------------
+       501 vaishnavi  15-SEP-24       7732942150
+       502 vinayk     01-SEP-24       7454942150
+
+SQL> insert into employee values(503,'vijay',to_date('1-09-2014','DD-MM-YYYY'),7454602150);
+
+1 row created.
+
+SQL> insert into employee values(503,'priyanka',to_date('1-08-2025','DD-MM-YYYY'),8454602350);
+
+1 row created.
+
+SQL> update employee set emp_id=504 where emp_name='priyanka';
+
+1 row updated.
+
+SQL> insert into employee values(503,'vikrant',to_date('17-02-2025','DD-MM-YYYY'),9624602350);
+
+1 row created.
+
+SQL> update employee set emp_id=505 where emp_name='vikrant';
+
+1 row updated.
+
+SQL> insert into employee values(506,'rajesh',to_date('17-02-2015','DD-MM-YYYY'),9624602280);
+
+1 row created.
+
+SQL> insert into employee values(507,'Shiv',to_date('17-02-2025','DD-MM-YYYY'),7624602380);
+
+1 row created.
+
+SQL> insert into employee values(508,'Shivam',to_date('17-02-2025','DD-MM-YYYY'),7234602380);
+
+1 row created.
+
+SQL> insert into employee values(509,'prathamesh',to_date('23-12-2025','DD-MM-YYYY'),9234602380);
+
+1 row created.
+
+SQL> insert into employee values(510,'arjun',to_date('23-8-2013','DD-MM-YYYY'),9834603340);
+
+1 row created.
+
+SQL> select * from customer;
+
+   CUST_ID CUST_NAME  CUST_CITY  CUST_STREE
+---------- ---------- ---------- ----------
+         1 om         satara     kesarkar
+         2 omkar      pune       vikas
+         3 viraj      pune       JM
+         4 raj        pune       FC
+         5 prashant   pune       JM
+         6 shashank   jalgao     pachola
+         7 atharva    pune       bhid
+         8 pratik     pune       anand
+         9 simon      pune       FC
+        10 carlton    delhi      VJ
+
+10 rows selected.
+
+SQL> select * from employee;
+
+    EMP_ID EMP_NAME   START_DAT TELEPHONE_NUMBER
+---------- ---------- --------- ----------------
+       501 vaishnavi  15-SEP-24       7732942150
+       502 vinayk     01-SEP-24       7454942150
+       503 vijay      01-SEP-14       7454602150
+       504 priyanka   01-AUG-25       8454602350
+       505 vikrant    17-FEB-25       9624602350
+       506 rajesh     17-FEB-15       9624602280
+       507 Shiv       17-FEB-25       7624602380
+       508 Shivam     17-FEB-25       7234602380
+       509 prathamesh 23-DEC-25       9234602380
+       510 arjun      23-AUG-13       9834603340
+
+10 rows selected.
+
+SQL> desc employee;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMP_ID                                             NUMBER(5)
+ EMP_NAME                                           VARCHAR2(10)
+ START_DATE                                         DATE
+ TELEPHONE_NUMBER                                   NUMBER(10)
+
+SQL> create table student(roll number(5),name varchar(10),marks number(5));
+
+Table created.
+
+SQL> insert into student values(39022,'Om',9.5);
+
+1 row created.
+
+SQL> insert into student values(39024,'Prashant',9.7);
+
+1 row created.
+
+SQL> insert into student values(39012,'Shashank',10);
+
+1 row created.
+
+SQL> insert into student values(39012,'Simon',9.2);
+
+1 row created.
+
+SQL> update student set roll=39061 where name='Simon';
+
+1 row updated.
+
+SQL> select * from student;
+
+      ROLL NAME            MARKS
+---------- ---------- ----------
+     39022 Om                 10
+     39024 Prashant           10
+     39012 Shashank           10
+     39061 Simon               9
+
+SQL> truncate table student;
+
+Table truncated.
+
+SQL> select * from student;
+
+no rows selected
+
+SQL> /*COMMENT*/
+
+SQL> alter table student rename to stud;
+
+Table altered.
+
+SQL> select * from stud;
+
+no rows selected
+
+SQL> alter table stud add(Dept varchar2(10));
+
+Table altered.
+
+SQL> desc stud;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ROLL                                               NUMBER(5)
+ NAME                                               VARCHAR2(10)
+ MARKS                                              NUMBER(5)
+ DEPT                                               VARCHAR2(10)
+
+SQL> alter table stud modify name varchar2(10) NOT NULL;
+
+Table altered.
+
+SQL> alter table stud modify(dept number(10));
+
+Table altered.
+
+SQL> desc stud;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ROLL                                               NUMBER(5)
+ NAME                                      NOT NULL VARCHAR2(10)
+ MARKS                                              NUMBER(5)
+ DEPT                                               NUMBER(10)
+
+SQL> alter table stud modify(dept varchar2(10));
+
+Table altered.
+
+SQL> alter table stud add constraint pk_roll PRIMARY KEY (roll);
+
+Table altered.
+
+SQL> alter table stud drop constraint pk_roll;
+
+Table altered.
+
+SQL> drop table stud;
+
+Table dropped.

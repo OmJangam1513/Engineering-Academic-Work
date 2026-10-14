@@ -1,0 +1,182 @@
+import tkinter as tk
+from tkinter import messagebox, ttk
+from pymongo import MongoClient
+
+
+# ------------------------------
+# MongoDB Connection Setup
+# ------------------------------
+client = MongoClient("mongodb://localhost:27017/")
+db = client["testdb"]
+collection = db["students"]
+
+
+# ------------------------------
+# GUI Application
+# ------------------------------
+class MongoGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("MongoDB CRUD GUI")
+        self.root.geometry("650x450")
+        self.root.resizable(False, False)
+
+        # ---------- Variables ----------
+        self.name_var = tk.StringVar()
+        self.email_var = tk.StringVar()
+        self.phone_var = tk.StringVar()
+        self.search_var = tk.StringVar()
+
+        # ---------- Labels ----------
+        tk.Label(root, text="Name:", font=('Arial', 11)).place(x=30, y=30)
+        tk.Label(root, text="Email:", font=('Arial', 11)).place(x=30, y=70)
+        tk.Label(root, text="Phone:", font=('Arial', 11)).place(x=30, y=110)
+
+        # ---------- Entry Boxes ----------
+        tk.Entry(root, textvariable=self.name_var, width=30).place(x=100, y=30)
+        tk.Entry(root, textvariable=self.email_var, width=30).place(x=100, y=70)
+        tk.Entry(root, textvariable=self.phone_var, width=30).place(x=100, y=110)
+
+        # ---------- Buttons ----------
+        tk.Button(root, text="Add", width=10, command=self.add_record).place(x=30, y=160)
+        tk.Button(root, text="Update", width=10, command=self.update_record).place(x=130, y=160)
+        tk.Button(root, text="Delete", width=10, command=self.delete_record).place(x=230, y=160)
+        tk.Button(root, text="Display All", width=10, command=self.display_records).place(x=330, y=160)
+
+        # ---------- Search ----------
+        tk.Label(root, text="Search by Name/Email:", font=('Arial', 10)).place(x=30, y=210)
+        tk.Entry(root, textvariable=self.search_var, width=25).place(x=190, y=210)
+        tk.Button(root, text="Search", width=10, command=self.search_record).place(x=400, y=207)
+        tk.Button(root, text="Clear", width=10, command=self.clear_search).place(x=500, y=207)
+
+        # ---------- Table (Treeview) ----------
+        self.tree = ttk.Treeview(root, columns=("Name", "Email", "Phone"), show='headings', height=8)
+        self.tree.place(x=30, y=250, width=580, height=170)
+        self.tree.heading("Name", text="Name")
+        self.tree.heading("Email", text="Email")
+        self.tree.heading("Phone", text="Phone")
+
+        self.tree.column("Name", width=160)
+        self.tree.column("Email", width=200)
+        self.tree.column("Phone", width=160)
+
+        self.tree.bind("<ButtonRelease-1>", self.select_record)
+
+        # ---------- Status ----------
+        self.status_label = tk.Label(root, text="", fg="blue", font=('Arial', 10))
+        self.status_label.place(x=30, y=430)
+
+        # Display initial records
+        self.display_records()
+
+    # ------------------ CRUD Operations ------------------
+
+    def add_record(self):
+        name = self.name_var.get().strip()
+        email = self.email_var.get().strip()
+        phone = self.phone_var.get().strip()
+
+        if not name:
+            messagebox.showwarning("Input Error", "Name is required!")
+            return
+
+        collection.insert_one({"name": name, "email": email, "phone": phone})
+        self.display_records()
+        self.clear_fields()
+        messagebox.showinfo("Success", "Record added successfully!")
+
+    def update_record(self):
+        selected = self.tree.selection()
+        if not selected:
+            messagebox.showwarning("Warning", "Please select a record to update!")
+            return
+
+        item = self.tree.item(selected[0])
+        old_name = item["values"][0]
+
+        collection.update_one(
+            {"name": old_name},
+            {"$set": {"name": self.name_var.get(), "email": self.email_var.get(), "phone": self.phone_var.get()}}
+        )
+        self.display_records()
+        self.clear_fields()
+        messagebox.showinfo("Updated", "Record updated successfully!")
+
+    def delete_record(self):
+        selected = self.tree.selection()
+        if not selected:
+            messagebox.showwarning("Warning", "Please select a record to delete!")
+            return
+
+        item = self.tree.item(selected[0])
+        name = item["values"][0]
+
+        collection.delete_one({"name": name})
+        self.display_records()
+        self.clear_fields()
+        messagebox.showinfo("Deleted", "Record deleted successfully!")
+
+    def display_records(self):
+        """Fetch all records and show in Treeview."""
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+
+        records = collection.find()
+        for rec in records:
+            self.tree.insert("", "end", values=(rec.get("name", ""), rec.get("email", ""), rec.get("phone", "")))
+
+        self.status_label.config(text=f"Total records: {collection.count_documents({})}")
+
+    def search_record(self):
+        """Search by name or email."""
+        query = self.search_var.get().strip()
+        if not query:
+            messagebox.showwarning("Warning", "Enter search text!")
+            return
+
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+
+        results = collection.find({
+            "$or": [{"name": {"$regex": query, "$options": "i"}},
+                    {"email": {"$regex": query, "$options": "i"}}]
+        })
+
+        found = False
+        for rec in results:
+            self.tree.insert("", "end", values=(rec.get("name", ""), rec.get("email", ""), rec.get("phone", "")))
+            found = True
+
+        if not found:
+            messagebox.showinfo("No Results", "No matching records found.")
+        else:
+            self.status_label.config(text="Search results displayed.")
+
+    def clear_search(self):
+        """Clear search field and reload records."""
+        self.search_var.set("")
+        self.display_records()
+
+    def select_record(self, event):
+        """Load selected record into entry fields."""
+        selected = self.tree.selection()
+        if selected:
+            item = self.tree.item(selected[0])
+            self.name_var.set(item["values"][0])
+            self.email_var.set(item["values"][1])
+            self.phone_var.set(item["values"][2])
+
+    def clear_fields(self):
+        """Clear entry fields."""
+        self.name_var.set("")
+        self.email_var.set("")
+        self.phone_var.set("")
+
+
+# -------------------------------
+# Run the GUI
+# -------------------------------
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = MongoGUI(root)
+    root.mainloop()
